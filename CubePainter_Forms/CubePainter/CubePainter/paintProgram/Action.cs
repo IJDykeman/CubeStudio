@@ -26,7 +26,8 @@ namespace CubePainter
         saveDocument,
         openDocument,
         newDocument,
-        quitProgram
+        quitProgram,
+        upgradePallete
     }
 
     public abstract class Action
@@ -186,6 +187,15 @@ namespace CubePainter
         public PlayerQuitProgram()
         {
             type = actionType.quitProgram;
+        }
+    }
+
+    class PlayerUpgradePallete : Action
+    {
+
+        public PlayerUpgradePallete()
+        {
+            type = actionType.upgradePallete;
         }
     }
 

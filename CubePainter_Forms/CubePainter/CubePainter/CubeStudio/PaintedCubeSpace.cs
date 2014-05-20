@@ -1282,5 +1282,19 @@ namespace CubeStudio
 
             return result;
         }
+
+        public void upgradeColors()
+        {
+            for (int x = 0; x < spaceWidth; x++)
+            {
+                for (int y = 0; y < spaceWidth; y++)
+                {
+                    for (int z = 0; z < spaceWidth; z++)
+                    {
+                        array[x, y, z] = ColorPallete.getNewByteFromOldByte(array[x, y, z]);
+                    }
+                }
+            }
+        }
     }
 }

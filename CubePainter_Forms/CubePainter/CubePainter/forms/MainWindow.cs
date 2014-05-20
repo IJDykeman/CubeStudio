@@ -128,7 +128,7 @@ namespace CubeStudio
         {
             var directoryNode = new TreeNode(directoryInfo.Name);
 
-                directoryNode.Expand();
+                //directoryNode.Expand();
 
 
             foreach (var directory in directoryInfo.GetDirectories())

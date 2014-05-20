@@ -57,8 +57,8 @@ namespace CubePainter
         bool colorPickerVisible;
         bool mirror = false;
 
-        readonly int colorPickerBlockWidth = 28;
-        readonly int colorPickerBlockHeight = 21;
+        int colorPickerBlockWidth = 28;
+        int colorPickerBlockHeight = 21;
 
         public Painter()
         {
@@ -81,6 +81,8 @@ namespace CubePainter
             bucketIcon = content.Load<Texture2D>("bucketIcon");
             UIfont = content.Load<SpriteFont>("SpriteFont1");
             smallPrint = content.Load<SpriteFont>("smallPrint");
+            colorPickerBlockWidth = colorsImage.Width/16;
+            colorPickerBlockHeight = colorsImage.Height / 16 ;
         }
 
         public List<Action> update(int screenWidth, int screenHeight)
@@ -365,6 +367,13 @@ namespace CubePainter
                     mirror = !mirror;
                     //result.Add(new PlayerNeedsUndoSave());
                 }
+
+            }
+
+
+            if (justHit(Keys.Up))
+            {
+                result.Add(new PlayerUpgradePallete());
             }
 
             displayGuideLines = keyState.IsKeyDown(Keys.LeftShift);
@@ -373,6 +382,7 @@ namespace CubePainter
             oldKeyboardState = keyState;
             return result;
         }
+
 
         public Vector3 playerAimingAt()
         {
@@ -422,14 +432,16 @@ namespace CubePainter
 
         public void displayColorPickerSystem(SpriteBatch spriteBatch, int screenHeight, int screenWidth)
         {
-            Vector2 colorPickerLoc = getColorPickerImageLoc(screenWidth, screenHeight);
+            Vector2 colorPaletteImageLoc = getColorPickerImageLoc(screenWidth, screenHeight);
             if (colorPickerVisible)
             {
-                spriteBatch.Draw(colorsImage, colorPickerLoc, Color.White);
+                spriteBatch.Draw(colorsImage, colorPaletteImageLoc, Color.White);
                 Vector2 currentColorLoc = new Vector2(selectedBlock % 16, selectedBlock / 16);
                 currentColorLoc.X *= colorPickerBlockWidth;
                 currentColorLoc.Y *= colorPickerBlockHeight;
-                spriteBatch.Draw(colorSwatchhighlight, currentColorLoc - new Vector2(1, 1) + colorPickerLoc, Color.White);
+                Vector2 colorHighlightLoc = currentColorLoc  + colorPaletteImageLoc;
+                spriteBatch.Draw(colorSwatchhighlight, new Rectangle((int)colorHighlightLoc.X,(int)colorHighlightLoc.Y,
+                    colorPickerBlockWidth+2,colorPickerBlockHeight+2), Color.White);
             }
         }
 

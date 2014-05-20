@@ -194,6 +194,11 @@ namespace CubePainter
                 case actionType.quitProgram:
                     PainterMain.quitGame();
                     break;
+                case actionType.upgradePallete:
+                    paintedCubeSpace.upgradeColors();
+                    paintedCubeSpace.createModel(Compositer.device);
+                    registerSaveableAction();
+                    break;
                 default:
                     throw new Exception("unhandled action");
                     
