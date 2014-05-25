@@ -112,7 +112,7 @@ namespace CubeAnimator
             // Matrix sunRotation = Matrix.CreateRotationX(MathHelper.ToRadians(updateCount)) * Matrix.CreateRotationZ(MathHelper.ToRadians(updateCount));
 
 
-                effect.Parameters["xAmbient"].SetValue(.6f);
+                effect.Parameters["xAmbient"].SetValue(.9f);
                 RasterizerState rasterizerState = new RasterizerState();
                 rasterizerState.FillMode = FillMode.Solid;
                 device.RasterizerState = rasterizerState;

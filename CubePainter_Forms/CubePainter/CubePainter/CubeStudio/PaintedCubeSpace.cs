@@ -128,7 +128,7 @@ namespace CubeStudio
 
             if (highLighted)
             {
-                effect.Parameters["xAmbient"].SetValue(7.6f);
+                effect.Parameters["xAmbient"].SetValue(1.5f);
                 rasterizerState = new RasterizerState();
                 rasterizerState.FillMode = FillMode.WireFrame;
                 device.RasterizerState = rasterizerState;
@@ -151,7 +151,7 @@ namespace CubeStudio
             rasterizerState.FillMode = FillMode.Solid;
             device.RasterizerState = rasterizerState;
 
-            effect.Parameters["xAmbient"].SetValue(.6f);
+            effect.Parameters["xAmbient"].SetValue(.9f);
             effect.Parameters["xWorld"].SetValue(getMatrix(superMatrix, rotation));
             thisVertexBuffer = vertexBuffer;
             thisIndexBuffer = indexBuffer;
