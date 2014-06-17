@@ -18,7 +18,6 @@ namespace CubeStudio
     public partial class MainWindow : Form
     {
         TreeNode lastNodeClicked;
-        public static string mainFolderPath = "C:/Users/Public/CubeStudio/";
         private TreeNode m_OldSelectNode;
         public static MainWindow singleton;
         string previousVoxPath = "";
@@ -27,9 +26,9 @@ namespace CubeStudio
 
         public MainWindow()
         {
-            if (!Directory.Exists(mainFolderPath))
+            if (!Directory.Exists(FilePathManager.getRootPath()))
             {
-                Directory.CreateDirectory(mainFolderPath);
+                Directory.CreateDirectory(FilePathManager.getRootPath());
             }
 
             InitializeComponent();
@@ -88,7 +87,7 @@ namespace CubeStudio
 
         public void updateFileTreeView()
         {
-            ListDirectory(treeView1, "C:/Users/Public/CubeStudio");
+            ListDirectory(treeView1, FilePathManager.getRootPath());
         }
 
         public bool hasDialogOpen()
@@ -224,8 +223,8 @@ namespace CubeStudio
                     {
                         openForm.Filter = "Character or voxel files (.chr, .vox)|*.vox;*.chr";
                     }
-                    
-                    string path = "C:\\Users\\Public\\CubeStudio\\"; // this is the path that you are checking.
+
+                    string path = FilePathManager.getRootPath(); // this is the path that you are checking.
                     if (Directory.Exists(path))
                     {
 
@@ -258,7 +257,7 @@ namespace CubeStudio
         private void openCubeStudioFolder_Click(object sender, EventArgs e)
         {
 
-            Process.Start(mainFolderPath);
+            Process.Start(FilePathManager.getRootPath());
         }
 
 
@@ -302,7 +301,7 @@ namespace CubeStudio
 
 
                 //openForm.ShowNewFolderButton = true;
-                string path = "C:\\Users\\Public\\CubeStudio\\"; // this is the path that you are checking.
+                string path = FilePathManager.getRootPath(); // this is the path that you are checking.
                 if (Directory.Exists(path))
                 {
                     //openForm.SelectedPath = path;
@@ -414,7 +413,7 @@ namespace CubeStudio
 
 
                 //openForm.ShowNewFolderButton = true;
-                string path = "C:\\Users\\Public\\CubeStudio\\"; // this is the path that you are checking.
+                string path = FilePathManager.getRootPath(); // this is the path that you are checking.
                 if (Directory.Exists(path))
                 {
                     //openForm.SelectedPath = path;

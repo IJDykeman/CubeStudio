@@ -76,6 +76,7 @@ namespace CubeAnimator
 
         public static PaintedCubeSpace loadSpaceFromName(string folderPath)
         {
+            folderPath = FilePathManager.addNecesaryPathing(folderPath);
             PaintedCubeSpace paintedCubeSpace=new PaintedCubeSpace();
 
             
