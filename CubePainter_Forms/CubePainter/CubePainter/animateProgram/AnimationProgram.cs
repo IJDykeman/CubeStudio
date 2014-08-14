@@ -21,7 +21,6 @@ namespace CubeAnimator
     {
 
         AnimationPlayer player;
-        //public static string saveFileName = "paintings";
 
         BodyPart rootBodyPart;
         RequiredPartDescription rootDescription;
@@ -265,8 +264,6 @@ namespace CubeAnimator
         {
             string bodyPartFileName = path.Split('/')[path.Split('/').Length-1];
             currentlyPlacingPart = new BodyPart(ModelLoader.loadSpaceFromName(path), new Vector3(), type, bodyPartFileName);
-           // actionQueue.Add(new AddBodyPartAction(player.playerAimNearPoint(), player.playerAimingAt(), false, ModelLoader.loadSpaceFromName(path), type));
-            //rootBodyPart = new BodyPart(ModelLoader.loadSpaceFromName(path), new Vector3(), type, "NOPE");
             if (rootBodyPart == null)
             {
 
@@ -274,12 +271,6 @@ namespace CubeAnimator
                 currentlyPlacingPart = null;
                 updateMainWindowCharacterChart();
             }
-
-            
-           //addModelOfBodyPartType(dataPath, type);
-            //MessageBox.Show("The calculations are complete "+bodyPartFileName);
-
-
         }
 
         public void updateMainWindowCharacterChart()
