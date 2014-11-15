@@ -65,10 +65,10 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>9E9E99E16DC88A005C7581D57354C784B4E66B82</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>3F01F732068F2F52A82C1165AD96BD25D2BCD25D</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>CubePainter_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>CubeStudio_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -272,6 +272,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CubePainter_TemporaryKey.pfx" />
+    <None Include="CubeStudio_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
