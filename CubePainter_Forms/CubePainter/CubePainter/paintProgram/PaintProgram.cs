@@ -73,7 +73,6 @@ namespace CubePainter
                 if (timeSinceLastSaveableAction > 3)
                 {
                     saveToStack();
-                    Console.WriteLine("stack size is " + savedSpaces.Count);
 
                 }
                 UIActionQueue.Clear();

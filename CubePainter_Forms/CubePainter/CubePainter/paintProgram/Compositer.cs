@@ -58,7 +58,7 @@ namespace CubePainter
                   4, RenderTargetUsage.DiscardContents);
 
             //device.SetRenderTarget(mainTarget);
-            device.Clear(Color.CornflowerBlue);
+            device.Clear(Color.LightGray);
             device.DepthStencilState = new DepthStencilState();
 
             effect.CurrentTechnique = effect.Techniques["Colored"];
@@ -151,20 +151,15 @@ namespace CubePainter
 
             Vector3 cameraOriginalTarget = new Vector3(0, 0, -1);
             Vector3 cameraRotatedTarget = Vector3.Transform(cameraOriginalTarget, cameraRotation);
-            //if (inBody)
-            // {
-            Vector3 neckAdjustment = new Vector3((float)Math.Cos(-leftrightRot + MathHelper.ToRadians(90)), 0, (float)Math.Sin(-leftrightRot + MathHelper.ToRadians(90)));
-            neckAdjustment.Normalize();
-            neckAdjustment = neckAdjustment * -.1f;
+
             Vector3 cameraFinalTarget = loc + cameraRotatedTarget;
-            //}
 
             Vector3 cameraOriginalUpVector = new Vector3(0, 1, 0);
             Vector3 cameraRotatedUpVector = Vector3.Transform(cameraOriginalUpVector, cameraRotation);
 
 
 
-            viewMatrix = Matrix.CreateLookAt(loc, cameraFinalTarget, cameraRotatedUpVector);
+            viewMatrix = Matrix.CreateLookAt(loc, new Vector3(0,0,0), new Vector3(0,1,0));
 
         }
 
