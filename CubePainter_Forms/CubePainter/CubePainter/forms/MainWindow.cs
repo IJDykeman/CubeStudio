@@ -561,5 +561,10 @@ namespace CubeStudio
         {
 
         }
+
+        private void painterDisplay1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

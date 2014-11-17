@@ -1,18 +1,14 @@
-//------------------------------------------------------
-//--                                                  --
-//--		   www.riemers.net                    --
-//--   		    Basic shaders                     --
-//--		Use/modify as you like                --
-//--                                                  --
-//------------------------------------------------------
 
 struct VertexToPixel
 {
-    float4 Position   	: POSITION;    
+	float4 Position   	: POSITION;
     float4 Color		: COLOR0;
-	float4 Paint		: COLOR1;
-    float LightingFactor: TEXCOORD0;
+	float4 PosToUse : TEXCOORD0;
     float2 TextureCoords: TEXCOORD1;
+	float3x3 worldSpaceToTangentSpace : TEXCOORD2;
+	float3 ViewDirection : COLOR1;
+
+	
 };
 
 struct PixelToFrame
@@ -29,75 +25,148 @@ float4x4 xView;
 float4x4 xProjection;
 float4x4 xWorld;
 float3 xLightDirection;
+float3 xLightLoc;
 float xAmbient;
 bool xEnableLighting;
 bool xShowNormals;
 float3 xCamPos;
 float3 xCamUp;
+float3 xViewDirection;
 float xPointSpriteSize;
 
 //------- Texture Samplers --------
 
 Texture xTexture;
-sampler TextureSampler = sampler_state { texture = <xTexture>; magfilter = POINT; minfilter = POINT; mipfilter=POINT; AddressU = mirror; AddressV = mirror;};
+sampler TextureSampler = sampler_state { texture = <xTexture>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = mirror; AddressV = mirror; };
 //change LINEAR to POINT for blocky textures
-//------- Technique: Pretransformed --------
 
-VertexToPixel PretransformedVS( float4 inPos : POSITION, float4 inColor: COLOR)
-{	
-	VertexToPixel Output = (VertexToPixel)0;
-	
-	Output.Position = inPos;
-	Output.Color = inColor;
-    
-	return Output;    
-}
+Texture xNormalMap;
+sampler NormalMapSampler = sampler_state { texture = <xNormalMap>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = mirror; AddressV = mirror; };
 
-PixelToFrame PretransformedPS(VertexToPixel PSIn) 
-{
-	PixelToFrame Output = (PixelToFrame)0;		
-	
-	Output.Color = PSIn.Color;
+Texture xSpecularMap;
+sampler SpecularMapSampler = sampler_state { texture = <xSpecularMap>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = mirror; AddressV = mirror; };
 
-	return Output;
-}
+Texture xHeightMap;
+sampler HeightMapSampler = sampler_state { texture = <xHeightMap>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = mirror; AddressV = mirror; };
 
-technique Pretransformed
-{
-	pass Pass0
-	{   
-		VertexShader = compile vs_2_0 PretransformedVS();
-		PixelShader  = compile ps_2_0 PretransformedPS();
-	}
-}
+Texture xGlossMap;
+sampler GlossMapSampler = sampler_state { texture = <xGlossMap>; magfilter = LINEAR; minfilter = LINEAR; mipfilter = LINEAR; AddressU = mirror; AddressV = mirror; };
 
 //------- Technique: Colored --------
 
-VertexToPixel ColoredVS( float4 inPos : POSITION, float3 inNormal: NORMAL, float4 inColor: COLOR, float4 inPaint: COLOR1)
+VertexToPixel ColoredVS(float4 inPos : POSITION, float3 inNormal : NORMAL0, float4 inColor : COLOR, float4 inPaint : COLOR1, float2 texCoord : TEXCOORD0, float3 binormal : NORMAL1, float3 tangent: NORMAL2)
 {	
 	VertexToPixel Output = (VertexToPixel)0;
 	float4x4 preViewProjection = mul (xView, xProjection);
 	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
     
 	Output.Position = mul(inPos, preWorldViewProjection) ;
+	Output.PosToUse = mul(inPos, xWorld);
 	Output.Color = inColor;
-	
-	Output.Paint = inPaint;
+
 	float3 Normal = normalize(mul(normalize(inNormal), xWorld));	
-	Output.LightingFactor = 1;
-	if (xEnableLighting)
-		Output.LightingFactor = saturate(dot(Normal, -xLightDirection));
-    
+
+	Output.TextureCoords = texCoord;
+	
+	Output.worldSpaceToTangentSpace[0] = mul(normalize(tangent), xWorld);
+	Output.worldSpaceToTangentSpace[1] = mul(normalize(binormal), xWorld);
+	Output.worldSpaceToTangentSpace[2] = mul(normalize(inNormal), xWorld);
+	Output.ViewDirection = mul(Output.worldSpaceToTangentSpace, xViewDirection - normalize(mul(inPos, xWorld)));
 	return Output;    
 }
 
+/*
 PixelToFrame ColoredPS(VertexToPixel PSIn) 
 {
 	PixelToFrame Output = (PixelToFrame)0;		
     
-	Output.Color = PSIn.Paint;
-	Output.Color.rgb *= (PSIn.LightingFactor  +xAmbient)*saturate(   ((-1.2)*(pow(PSIn.Color.r*4,1)/6) + 1) );
 
+
+
+
+	float level = tex2D(HeightMapSampler, PSIn.TextureCoords).r;
+	float2 displacedTex = (level * .02 - .01) * xViewDirection.xy + PSIn.TextureCoords;
+
+
+
+			float3 normalMap = 2.0 *(tex2D(NormalMapSampler, displacedTex)) - 1.0;
+			normalMap = normalize(mul(normalMap, PSIn.worldSpaceToTangentSpace));
+		//normalMap = -normalMap;
+		//normalMap = (0, -1, 0);
+	float4 normal = float4(normalMap, 1.0);
+		float3 lightDirection = normalize(xLightLoc - PSIn.PosToUse);
+
+
+		float4 color = tex2D(TextureSampler, displacedTex);
+		//Output.Color.rgb *= (PSIn.LightingFactor + xAmbient)*saturate(   ((-1.2)*(pow(PSIn.Color.r*4,1)/6) + 1) );
+		float4 diffuse = saturate(dot(lightDirection, normal));
+
+		float3 reflectVec = reflect(lightDirection, normal);
+		float4 specular = pow(saturate(dot(normalize(reflectVec), normalize(xViewDirection))), 1) *tex2D(SpecularMapSampler, displacedTex);
+
+		//float3 reflectionVector = -reflect(lightDirection, normal);
+		//float specular = dot(normalize(reflectionVector), normalize(xViewDirection));
+		//specular = pow(specular, specular*36);
+
+
+		//diffuse *= 1 / pow(distance(xLightLoc, PSIn.PosToUse),2);
+
+		Output.Color = //color * xAmbient +
+			color*diffuse + color *specular;
+		//Output.Color.rgb *= ((-1.2)*(pow(PSIn.Color.r * 4, 1) / 6) + 1);
+	Output.Color.a = 1;
+
+	return Output;
+}*/
+PixelToFrame ColoredPS(VertexToPixel PSIn)
+{
+	PixelToFrame Output = (PixelToFrame)0;
+
+	float level = tex2D(HeightMapSampler, PSIn.TextureCoords).r;
+	float2 displacedTex = (level * .02 - .01) * xViewDirection.xy + PSIn.TextureCoords;
+
+	// Sample the textures
+	float3 normalMap = 2.0 *(tex2D(NormalMapSampler, displacedTex)) - 1.0;
+	normalMap = normalize(mul(normalMap, PSIn.worldSpaceToTangentSpace));
+	//normalMap = -normalMap;
+	//normalMap = (0, -1, 0);
+	float4 Normal = float4(normalMap, 1.0);
+		float3  Specular = tex2D(SpecularMapSampler, displacedTex).rgb;
+		float3  Diffuse = tex2D(TextureSampler, displacedTex).rgb;
+		float2  Roughness = tex2D(GlossMapSampler, displacedTex).rg;
+		//Roughness.rg = pow(Roughness.rg,8);//MAGIC HACK
+	Roughness.r *= 3.0f;
+
+	// Correct the input and compute aliases
+
+	float3  ViewDir = -normalize(xViewDirection);
+		float3  LightDir = normalize(xLightLoc - PSIn.PosToUse);
+		float3  vHalf = normalize(LightDir + ViewDir);
+		float  NormalDotHalf = dot(Normal, vHalf);
+	float  ViewDotHalf = dot(vHalf, ViewDir);
+	float  NormalDotView = dot(Normal, ViewDir);
+	float  NormalDotLight = dot(Normal, LightDir);
+
+	// Compute the geometric term
+	float  G1 = (2.0f * NormalDotHalf * NormalDotView) / ViewDotHalf;
+	float  G2 = (2.0f * NormalDotHalf * NormalDotLight) / ViewDotHalf;
+	float  G = min(1.0f, max(0.0f, min(G1, G2)));
+
+	// Compute the fresnel term
+	float  F = Roughness.g + (1.0f - Roughness.g) * pow(1.0f - NormalDotView, 5.0f);
+
+	// Compute the roughness term
+	float  R_2 = Roughness.r * Roughness.r;
+	float  NDotH_2 = NormalDotHalf * NormalDotHalf;
+	float  A = 1.0f / (4.0f * R_2 * NDotH_2 * NDotH_2);
+	float  B = exp(-(1.0f - NDotH_2) / (R_2 * NDotH_2));
+	float  R = A * B;
+
+	// Compute the final term
+	//float3  S = Specular * ((G * F * R) / (NormalDotLight * NormalDotView));
+	float3  Final = /*cLightColour.rgb **/ max(0.0f, NormalDotLight) * (Diffuse * 1 / pow(distance(xLightLoc, PSIn.PosToUse), 1));// +S);
+
+		Output.Color = float4(Final, 1.0f);
 	return Output;
 }
 
@@ -107,160 +176,5 @@ technique Colored
 	{   
 		VertexShader = compile vs_2_0 ColoredVS();
 		PixelShader  = compile ps_2_0 ColoredPS();
-	}
-}
-
-//------- Technique: ColoredNoShading --------
-
-VertexToPixel ColoredNoShadingVS( float4 inPos : POSITION, float4 inColor: COLOR)
-{	
-	VertexToPixel Output = (VertexToPixel)0;
-	float4x4 preViewProjection = mul (xView, xProjection);
-	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
-    
-	Output.Position = mul(inPos, preWorldViewProjection);
-	Output.Color = inColor;
-    
-	return Output;    
-}
-
-PixelToFrame ColoredNoShadingPS(VertexToPixel PSIn) 
-{
-	PixelToFrame Output = (PixelToFrame)0;		
-    
-	Output.Color = PSIn.Color;
-
-	return Output;
-}
-
-technique ColoredNoShading
-{
-	pass Pass0
-	{   
-		VertexShader = compile vs_2_0 ColoredNoShadingVS();
-		PixelShader  = compile ps_2_0 ColoredNoShadingPS();
-	}
-}
-
-
-//------- Technique: Textured --------
-
-VertexToPixel TexturedVS( float4 inPos : POSITION, float3 inNormal: NORMAL, float2 inTexCoords: TEXCOORD0,  float inColor: COLOR)
-{	
-	
-	VertexToPixel Output = (VertexToPixel)0;
-	float4x4 preViewProjection = mul (xView, xProjection);
-	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
-    
-	Output.Position = mul(inPos, preWorldViewProjection);	
-	Output.TextureCoords = inTexCoords;
-	Output.Color = inColor;
-	
-	float3 Normal = normalize(mul(normalize(inNormal), xWorld));	
-	Output.LightingFactor = 1;
-	if (xEnableLighting)
-		Output.LightingFactor = dot(Normal, -xLightDirection);///Output.LightingFactor = dot(Normal, -xLightDirection);
-    
-	return Output;    
-}
-
-PixelToFrame TexturedPS(VertexToPixel PSIn) 
-{
-	PixelToFrame Output = (PixelToFrame)0;		
-	
-
-	
-	Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
-	Output.Color.rgb *= (saturate(PSIn.LightingFactor) + xAmbient)*saturate(1-(pow(PSIn.Color.r*4,1))/6);
-	
-	if(Output.Color.a<.2){
-		discard;
-	}
-
-	return Output;
-}
-
-technique Textured
-{
-	pass Pass0
-	{   
-		VertexShader = compile vs_2_0 TexturedVS();
-		PixelShader  = compile ps_2_0 TexturedPS();
-	}
-}
-
-//------- Technique: TexturedNoShading --------
-
-VertexToPixel TexturedNoShadingVS( float4 inPos : POSITION, float3 inNormal: NORMAL, float2 inTexCoords: TEXCOORD0)
-{	
-	VertexToPixel Output = (VertexToPixel)0;
-	float4x4 preViewProjection = mul (xView, xProjection);
-	float4x4 preWorldViewProjection = mul (xWorld, preViewProjection);
-    
-	Output.Position = mul(inPos, preWorldViewProjection);	
-	Output.TextureCoords = inTexCoords;
-    
-	return Output;    
-}
-
-PixelToFrame TexturedNoShadingPS(VertexToPixel PSIn) 
-{
-	PixelToFrame Output = (PixelToFrame)0;		
-	
-	Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
-
-	return Output;
-}
-
-technique TexturedNoShading
-{
-	pass Pass0
-	{   
-		VertexShader = compile vs_2_0 TexturedNoShadingVS();
-		PixelShader  = compile ps_2_0 TexturedNoShadingPS();
-	}
-}
-
-//------- Technique: PointSprites --------
-
-VertexToPixel PointSpriteVS(float3 inPos: POSITION0, float2 inTexCoord: TEXCOORD0)
-{
-    VertexToPixel Output = (VertexToPixel)0;
-
-    float3 center = mul(inPos, xWorld);
-    float3 eyeVector = center - xCamPos;
-
-    float3 sideVector = cross(eyeVector,xCamUp);
-    sideVector = normalize(sideVector);
-    float3 upVector = cross(sideVector,eyeVector);
-    upVector = normalize(upVector);
-
-    float3 finalPosition = center;
-    finalPosition += (inTexCoord.x-0.5f)*sideVector*0.5f*xPointSpriteSize;
-    finalPosition += (0.5f-inTexCoord.y)*upVector*0.5f*xPointSpriteSize;
-
-    float4 finalPosition4 = float4(finalPosition, 1);
-
-    float4x4 preViewProjection = mul (xView, xProjection);
-    Output.Position = mul(finalPosition4, preViewProjection);
-
-    Output.TextureCoords = inTexCoord;
-
-    return Output;
-}
-
-PixelToFrame  PointSpritePS(VertexToPixel PSIn) : COLOR0
-{
-    PixelToFrame Output = (PixelToFrame)0;
-    Output.Color = tex2D(TextureSampler, PSIn.TextureCoords);
-    return Output;
-}
-
-technique PointSprites
-{
-	pass Pass0
-	{   
-		VertexShader = compile vs_2_0 PointSpriteVS();
-		PixelShader  = compile ps_2_0 PointSpritePS();
 	}
 }

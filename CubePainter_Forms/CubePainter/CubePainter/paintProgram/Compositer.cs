@@ -24,7 +24,7 @@ namespace CubePainter
         public static Matrix viewMatrix;
         public static Matrix projectionMatrix;
         public static Effect effect;
-
+        static int age = 0;
 
         public static void construct(GraphicsDevice mdevice)
         {
@@ -38,7 +38,15 @@ namespace CubePainter
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(device);
             effect = content.Load<Effect>("effects");
-           
+
+            //String texName = "Rock_Obsidian_1k";
+            //String texName = "Brick_MedievalBrown3_1k";
+            String texName = "Ground_GuiLayeredCliffMossIvy_1k";
+            effect.Parameters["xTexture"].SetValue(content.Load<Texture2D>("textures/"+texName+"_alb"));
+            effect.Parameters["xNormalMap"].SetValue(content.Load<Texture2D>("textures/"+texName+"_n"));
+            effect.Parameters["xSpecularMap"].SetValue(content.Load<Texture2D>("textures/"+texName+"_s"));
+            effect.Parameters["xHeightMap"].SetValue(content.Load<Texture2D>("textures/"+texName+"_h"));
+            effect.Parameters["xGlossMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_g"));
 
 
             // TODO: use this.Content to load your animationProgram content here
@@ -53,7 +61,7 @@ namespace CubePainter
         public static void drawFinalImage( Painter player, PaintedCubeSpace space, int width, int height, int mouseX, int mouseY)
         {
             //width /= 2;
-            
+            age++;
               mainTarget = new RenderTarget2D(device, width, height,false, device.DisplayMode.Format, DepthFormat.Depth24, 
                   4, RenderTargetUsage.DiscardContents);
 
@@ -106,12 +114,12 @@ namespace CubePainter
 
             effect.Parameters["xEnableLighting"].SetValue(true);
 
-            Vector3 lightDirection = new Vector3(-.3f, .5f, -1f);
+            Vector3 lightDirection = new Vector3((float)Math.Cos(age / 50f), 0, (float)Math.Sin(age / 50f));
+            //Vector3 lightDirection = new Vector3(0, 1, 0);
 
             lightDirection.Normalize();
-            lightDirection *= (float).3f;
             effect.Parameters["xLightDirection"].SetValue(lightDirection);
-
+            effect.Parameters["xLightLoc"].SetValue(new Vector3((float)Math.Cos(age / 50f), -.2f, 0f));
 
             // Matrix sunRotation = Matrix.CreateRotationX(MathHelper.ToRadians(updateCount)) * Matrix.CreateRotationZ(MathHelper.ToRadians(updateCount));
 
@@ -179,9 +187,6 @@ namespace CubePainter
                 var data = new List<VertexPositionColor>(locations.Count * 2);
                 for (int i = 1; i < locations.Count; i++)
                 {
-
-
-
 
 
                     data.Add(new VertexPositionColor(locations[i], color));

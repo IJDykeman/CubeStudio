@@ -67,18 +67,19 @@ namespace CubeStudio
 
             resetSpace();
 
+
         }
 
         void resetSpace()
         {
-            array = new byte[1, 1, 1];
+            array = new byte[3, 3, 3];
             Random rand = new Random();
 
 
             loc = new Vector3();
 
-            spaceHeight = 1;
-            spaceWidth = 1;
+            spaceHeight = 3;
+            spaceWidth = 3;
             boundingBox = new BoundingBox(loc, loc + new Vector3(spaceWidth, spaceHeight, spaceWidth));
             for (int x = 0; x < spaceWidth; x++)
             {
@@ -86,15 +87,11 @@ namespace CubeStudio
                 {
                     for (int z = 0; z < spaceWidth; z++)
                     {
-                        if (y > 0)
+                        if (y == 0)
                         {
-                            array[x, y, z] = 0;
+                            array[x, y, z] = 12;
                         }
-                        else
-                        {
-                            array[x, y, z] = 5;
-                        }
-                        array[x, y, z] = 5;
+
                     }
                 }
             }
@@ -190,17 +187,7 @@ namespace CubeStudio
 
         public void createModel(GraphicsDevice device)
         {
-
-            //readyToBeDisplayed = false; // When the meshingThread comes through and sees this has been set to false, it executes this function
-            //even though it's alreasy being executed in the main thread( IF this is a priority chunk(being set by the player))
-
-
             numVertices = 0;
-            //vertices = null;
-            //indices = null;
-            //indexBuffer = null;
-            //vertexBuffer = null; // setting these to null seemed to be causing threading problems.  The meshes are set to null in this thread
-            //  then they are drawn while null.
             List<VertexPostitionColorPaintNormal> tempVertexList = new List<VertexPostitionColorPaintNormal>(1024);
             List<int> tempIntList = new List<int>(100);
 
@@ -280,117 +267,6 @@ namespace CubeStudio
             pX, nX, pY, nY, pZ, nZ
         }
 
-        public void createModelEXPERIMENTAL(GraphicsDevice device)
-        {
-
-            //readyToBeDisplayed = false; // When the meshingThread comes through and sees this has been set to false, it executes this function
-            //even though it's alreasy being executed in the main thread( IF this is a priority chunk(being set by the player))
-
-            // x and z imposed faces pass
-            for (int x = 0; x < spaceWidth; x++)
-            {
-                for (int z = 0; z < spaceWidth; z++)
-                {
-
-                    //panels are labeled by organized direction
-                    CubeSurfacePanel? pXPanel= null;
-                    CubeSurfacePanel? nXPanel = null;
-                    CubeSurfacePanel? pZPanel = null;
-                    CubeSurfacePanel? nZPanel = null;
-
-                    for (int y = 0; y < spaceHeight; y++)
-                    {
-                        if (!withinSpace(x+1,y,z) || isTransparentAt(x+1, y, z)) //TODO: optimize away within check
-                        {
-                            if (pXPanel == null)
-                            {
-                                pXPanel = new CubeSurfacePanel(new IntVector3(x, y, z), new IntVector3 (0,0,0), array[x,y,z], AxisDirection.pX);
-
-                            }
-                        }
-                    }
-                }
-            }
-
-
-
-
-            numVertices = 0;
-            //vertices = null;
-            //indices = null;
-            //indexBuffer = null;
-            //vertexBuffer = null; // setting these to null seemed to be causing threading problems.  The meshes are set to null in this thread
-            //  then they are drawn while null.
-            List<VertexPostitionColorPaintNormal> tempVertexList = new List<VertexPostitionColorPaintNormal>(1024);
-            List<int> intList = new List<int>(1536);
-
-
-            int numIndices = 0;
-            byte tempNumFaces = 0;
-            for (int x = 0; x < spaceWidth; x++)
-            {
-                for (int z = 0; z < spaceWidth; z++)
-                {
-                    for (int y = 0; y < spaceHeight; y++)
-                    {
-                        if (array[x, y, z] != 0)
-                        {
-                            bool[] coveredArray = getTypeAt(x, y, z).updateOnGeometryModification(x, y, z, this);
-
-                            if (!coveredArray[0]) //if block is not covered
-                            {
-                                for (int i = 1; i < 7; i++)
-                                {
-                                    if (coveredArray[i])
-                                    {
-                                        tempNumFaces++;
-                                    }
-                                }
-                            }
-                            numVertices += tempNumFaces * 4;
-                            numIndices += tempNumFaces * 6;
-
-                            tempNumFaces = 0;
-
-                            getTypeAt(x, y, z).draw(this, intList, tempVertexList, new Vector3(x, y, z), coveredArray,
-                                cornersCoveredAlong(x, y, z, coveredArray[0]));
-                        }
-
-
-                    }
-                }
-            }
-            vertices = new VertexPostitionColorPaintNormal[tempVertexList.Count];
-            indices = new short[intList.Count];
-
-            for (int i = 0; i < intList.Count; i++)
-            {
-                indices[i] = (short)intList[i];
-            }
-
-
-            for (int i = 0; i < tempVertexList.Count; i++)
-            {
-                vertices[i] = tempVertexList[i];
-
-            }
-            outputSCII_STL(vertices, intList);
-            indexCount = 0;
-            vertexCount = 0;
-            if (vertices.Length == 0)
-            {
-                resetSpace();
-                createModel(device);
-                return;
-            }
-            copyToBuffers(device);
-
-            //pathHandler.updateAfterChunkChange();//TEMP
-            readyToBeDisplayed = true;
-
-
-
-        }
 
         public void outputSCII_STL(VertexPostitionColorPaintNormal[] vertices, List<int> indices)
         {
@@ -431,7 +307,6 @@ namespace CubeStudio
         {
             return new Block(ColorPallete.colorArray[array[x, y, z]]);
         }
-
 
         public void serializeChunk(string savePath)
         {
@@ -671,14 +546,17 @@ namespace CubeStudio
             Vector3 blockLoc = (Vector3)blockLocMaybe;
             if (!withinSpace(blockLoc))
             {
-                expandArray();
-                placeBlockFromWorldSpace(firstRef, secondRef, toPlace, mirror);
-                return true;
+                //expandArray();
+                //placeBlockFromWorldSpace(firstRef, secondRef, toPlace, mirror);
+                //return true;
             }
-            array[(int)blockLoc.X, (int)blockLoc.Y, (int)blockLoc.Z] = toPlace;
-            if (mirror)
+            else
             {
-                mirrorBlockPlace((int)blockLoc.X, (int)blockLoc.Y, (int)blockLoc.Z, toPlace);
+                array[(int)blockLoc.X, (int)blockLoc.Y, (int)blockLoc.Z] = toPlace;
+                if (mirror)
+                {
+                    mirrorBlockPlace((int)blockLoc.X, (int)blockLoc.Y, (int)blockLoc.Z, toPlace);
+                }
             }
             return true;
         }

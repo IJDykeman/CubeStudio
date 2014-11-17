@@ -27,7 +27,7 @@ namespace CubePainter
 
         const float rotationSpeed = 0.3f;
         const float moveSpeed = 20;
-        float distanceFromModel = 20.0f;
+        float distanceFromModel = 7;
 
 
         //float dragRotationSpeed=.01f;
@@ -100,7 +100,7 @@ namespace CubePainter
                     return result;
 
             }
-
+           
             oldKeyboardState = Keyboard.GetState();
             return result;
 
@@ -137,18 +137,18 @@ namespace CubePainter
                     loc *= distanceFromModel;
                     if (keyState.IsKeyDown(Keys.S))
                     {
-                        distanceFromModel+=.6f;
+                        distanceFromModel+=.1f;
                     }
                     else if (keyState.IsKeyDown(Keys.W))
                     {
-                        distanceFromModel-=.6f;
+                        distanceFromModel-=.1f;
                     }
                     
                     if (currentMouseState.LeftButton == ButtonState.Pressed && (oldMouseState.LeftButton != ButtonState.Pressed || keyState.IsKeyDown(Keys.LeftControl)))
                     {
                         if (keyState.IsKeyDown(Keys.LeftShift))
                         {
-                            result.Add(new PlayerShiftLeftClickAction(playerAimNearPoint(), playerAimingAt()));
+                            result.Add(new PlayerShiftLeftClickAction(playerAimNearPoint(), playerMouseAimingAt()));
 
                         }
                         else if (keyState.IsKeyDown(Keys.LeftAlt))
@@ -156,7 +156,7 @@ namespace CubePainter
                         }
                         else
                         {
-                            result.Add(new PlayerLeftClickAction(playerAimNearPoint(), playerAimingAt(), mirror));
+                            result.Add(new PlayerLeftClickAction(playerAimNearPoint(), playerMouseAimingAt(), mirror));
                         }
 
                     }
@@ -164,11 +164,11 @@ namespace CubePainter
                     {
                         if (keyState.IsKeyDown(Keys.LeftAlt))
                         {
-                            result.Add(new PlayerAltClickAction(playerAimNearPoint(), playerAimingAt(), mirror));
+                            result.Add(new PlayerAltClickAction(playerAimNearPoint(), playerMouseAimingAt(), mirror));
                         }
                         else
                         {
-                            result.Add(new PlayerRightClickAction(playerAimNearPoint(), playerAimingAt(), mirror));
+                            result.Add(new PlayerRightClickAction(playerAimNearPoint(), playerMouseAimingAt(), mirror));
                         }
                     }
 
@@ -233,6 +233,8 @@ namespace CubePainter
 
         public List<Action> processKeyboard()
         {
+            Compositer.effect.Parameters["xCamPos"].SetValue(loc);
+            Compositer.effect.Parameters["xViewDirection"].SetValue(Vector3.Normalize(playerAimingAt() - loc));
             if (MainWindow.singleton.hasDialogOpen())
             {
                 return new List<Action>();
@@ -331,10 +333,19 @@ namespace CubePainter
         }
 
 
-        public Vector3 playerAimingAt()
+        public Vector3 playerMouseAimingAt()
         {
 
             Vector3 far = new Vector3(PainterMain.mouseLocationInXNASpace.X, PainterMain.mouseLocationInXNASpace.Y, 1f);
+
+            far = Compositer.device.Viewport.Unproject(far, Compositer.projectionMatrix, Compositer.viewMatrix, Matrix.Identity);
+            return far;
+        }
+
+        public Vector3 playerAimingAt()
+        {
+
+            Vector3 far = new Vector3(Compositer.device.PresentationParameters.BackBufferWidth / 2, Compositer.device.PresentationParameters.BackBufferHeight / 2, 1f);
 
             far = Compositer.device.Viewport.Unproject(far, Compositer.projectionMatrix, Compositer.viewMatrix, Matrix.Identity);
             return far;

@@ -41,6 +41,7 @@ namespace CubeStudio
 
         static readonly float imageFudge = .002f;
         static readonly float imageWidth = 1.0f / 16.0f - imageFudge;
+        static Vector2[] texCoordsByCorner;
 
         public Block(Color ncolor)
         {
@@ -49,132 +50,19 @@ namespace CubeStudio
             One.PaintColor = paint;
             Two.PaintColor = paint;
             Three.PaintColor = paint;
+            texCoordsByCorner = new Vector2[8];
+
+            texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh] = new Vector2(1, 1);
+            texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl] = new Vector2(0, 1);
+            texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh] = new Vector2(1, 0);
+            texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl] = new Vector2(0, 0);
+
+            texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh] = new Vector2(0, 0);
+            texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl] = new Vector2(1, 0);
+            texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh] = new Vector2(0, 1);
+            texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl] = new Vector2(1, 1);
         }
 
-
-
-        /*
-        public bool[] updateOnGeometryModification(int x, int y, int z, PaintedCubeSpace toReplace)
-        {
-
-            coveredUp = true;
-            coveredDown = true;
-            coveredForward = true;
-            coveredBack = true;
-            coveredLeft = true;
-            coveredRight = true;
-            covered = false;
-            //if (z+1<100) {
-            if (z + 1 < toReplace.spaceWidth)
-            {
-                if (toReplace.isTransparentAt(x, y, z + 1))
-                {
-
-                    coveredBack = false;
-                }
-            }
-            else
-            {
-
-                    coveredBack = false;
-                
-            }
-
-            // -Z "back" face
-            //if (z-1>=0) {
-            if (z - 1 >= 0)
-            {
-                if (toReplace.isTransparentAt(x, y, z - 1))
-                {
-                    coveredForward = false;
-                }
-            }
-            else
-            {
-
-                    coveredForward = false;
-                
-
-            }
-
-            // +Y "bottom" face
-            if (y + 1 <= toReplace.spaceHeight - 1)
-            {
-
-
-                    coveredUp = false;
-                
-            }
-            else
-            {
-                coveredUp = false;
-            }
-
-            //  -Y "top" face
-
-            if (y - 1 >= 0)
-            {
-
-                    coveredDown = false;
-                
-            }
-            else
-            {
-                coveredDown = false;
-            }
-            if (y == 0)
-            {
-                coveredDown = false;
-            }
-
-            // +X "right" face
-
-            if (x + 1 <= toReplace.spaceWidth - 1)
-            {
-
-                    coveredLeft = false;
-                
-            }
-            else
-            {
-                coveredLeft = false;
-                
-            }
-            // 
-            // -X "left" face
-            //if (x-1>=0) {
-            if (x - 1 >= 0)
-            {
-
-
-                    coveredRight = false;
-                
-            }
-            else
-            {
-
-                    coveredRight = false;
-                
-            }
-
-            if (coveredUp && coveredDown && coveredForward && coveredBack && coveredLeft && coveredRight)
-            {
-                covered = true;
-            }
-
-
-            bool[] resultCFBLRUD = new bool[7];
-            resultCFBLRUD[0] = covered;
-            resultCFBLRUD[1] = coveredForward;
-            resultCFBLRUD[2] = coveredBack;
-            resultCFBLRUD[3] = coveredLeft;
-            resultCFBLRUD[4] = coveredRight;
-            resultCFBLRUD[5] = coveredUp;
-            resultCFBLRUD[6] = coveredDown;
-            return resultCFBLRUD;
-
-        }
-        */
 
         public bool[] updateOnGeometryModification(int x, int y, int z, PaintedCubeSpace space)
         {
@@ -197,8 +85,6 @@ namespace CubeStudio
             }
             else
             {
-
-
                     coveredBack = false;
                 
             }
@@ -214,10 +100,7 @@ namespace CubeStudio
             }
             else
             {
-
-
                     coveredForward = false;
-                
 
             }
 
@@ -226,8 +109,6 @@ namespace CubeStudio
             {
                 if (space.isTransparentAt(x, y + 1, z))
                 {
-
-
                     coveredUp = false;
                 }
             }
@@ -250,10 +131,7 @@ namespace CubeStudio
             }
             else
             {
-                /////if (toReplace.spaceChunkWorld.worldIsTransparentAt(new Vector3(x + (int)toReplace.loc.X, y + (int)toReplace.loc.Y-1, z + (int)toReplace.loc.Z)))
-                /////{
                 coveredDown = false;
-                ////}
             }
             if (y == 0)
             {
@@ -277,7 +155,6 @@ namespace CubeStudio
             }
             // 
             // -X "left" face
-            //if (x-1>=0) {
             if (x - 1 >= 0)
             {
                 if (space.isTransparentAt(x - 1, y, z))
@@ -313,10 +190,6 @@ namespace CubeStudio
 
         public int draw(PaintedCubeSpace space, List<int> indexList, List<VertexPostitionColorPaintNormal> vertexList, Vector3 loc, bool[] coveredArray, byte[][] AOarray)
         {
-            //Zero.Color.R = new Color(Game1.world.rand.Next(255), Game1.world.rand.Next(255), Game1.world.rand.Next(255));
-            //One.Color = new Color(Game1.world.rand.Next(255), Game1.world.rand.Next(255), Game1.world.rand.Next(255));
-            //Two.Color = new Color(Game1.world.rand.Next(255), Game1.world.rand.Next(255), Game1.world.rand.Next(255));
-            // Three.Color = new Color(Game1.world.rand.Next(255), Game1.world.rand.Next(255), Game1.world.rand.Next(255));
 
             XlYhZl = new Vector3(0 + loc.X + cubeEdgePadding, cubeHeight + loc.Y, 0f + loc.Z + cubeEdgePadding);
 
@@ -397,13 +270,7 @@ namespace CubeStudio
         public int getNumFacesExposed(int x, int y, int z, PaintedCubeSpace space)
         {
             updateOnGeometryModification(x, y, z, space);
-            /*drawFront(toReplace);
-            drawBack(toReplace);
-            drawTop(toReplace);
-            drawBottom(toReplace);
-            drawLeft(toReplace);
-            drawRight(toReplace);
-            toReplace.numFaces += 6;*/
+
             int result = 0;
             if (!covered)
             {
@@ -446,18 +313,33 @@ namespace CubeStudio
             return result;
         }
 
-        /*public  void drawWithBox(Game1 world)
+        public void assign_Normal_Binormal_TanToOneTwoThreeFour(Vector3 normal, Vector3 binormal, Vector3 tangent)
         {
-            Box test = new Box(loc, 1, 1, 1, new Vector3(), new Vector2());
-            test.draw(world);
-        }*/
+            One.Normal = normal;
+            One.BiNormal = binormal;
+            One.Tangent = tangent;
+
+            Two.Normal = normal;
+            Two.BiNormal = binormal;
+            Two.Tangent = tangent;
+
+            Three.Normal = normal;
+            Three.BiNormal = binormal;
+            Three.Tangent = tangent;
+
+            Zero.Normal = normal;
+            Zero.BiNormal = binormal;
+            Zero.Tangent = tangent;
+
+
+        }
+
 
         public void drawFront(PaintedCubeSpace space, List<int> indexList, List<VertexPostitionColorPaintNormal> vertexList, Vector3 loc, byte[] AOarray)//normal along z
         {
 
+            assign_Normal_Binormal_TanToOneTwoThreeFour(new Vector3(0, 0, -1), new Vector3(0, 1, 0), new Vector3(1, 0, 0));
 
-
-            Vector3 thisNormal = new Vector3(0, 0, -1f);
             Vector2 frontTexturePos = texturePos;
 
 
@@ -474,20 +356,20 @@ namespace CubeStudio
 
 
             Zero.Position = XlYhZl;//new Vector3(0 + loc.X, cubeHeight + loc.Y, 0f + loc.Z);
-            Zero.Normal = thisNormal;
             Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
+            Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
 
             One.Position = XlYlZl;//new Vector3(0f + loc.X, 0f + loc.Y, 0f + loc.Z);
-            One.Normal = thisNormal;
             One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
+            One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
 
             Two.Position = XhYlZl;//new Vector3(cubeWidth + loc.X, 0f + loc.Y, 0f + loc.Z);
-            Two.Normal = thisNormal;
             Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
+            Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
 
             Three.Position = XhYhZl;//new Vector3(cubeWidth + loc.X, cubeHeight + loc.Y, 0f + loc.Z);
-            Three.Normal = thisNormal;
             Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
+            Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
 
 
             vertexList.Add(Zero);
@@ -505,19 +387,7 @@ namespace CubeStudio
 
         public void drawBack(PaintedCubeSpace space, List<int> indexList, List<VertexPostitionColorPaintNormal> vertexList, Vector3 loc, byte[] AOarray)
         {
-
-
-            Vector3 thisNormal = new Vector3(3f, -.5f, 1f);
-            thisNormal.Normalize();
-            Vector2 frontTexturePos = texturePos;
-
-
-
-
-
-
-            //vertexList[toReplace.count + 4].TextureCoordinate = new Vector2(imageWidth + frontTexturePos.X, 0 + frontTexturePos.Y);
-            //vertexList[toReplace.count + 5].TextureCoordinate = new Vector2(0 + frontTexturePos.X, imageWidth + frontTexturePos.Y);
+            assign_Normal_Binormal_TanToOneTwoThreeFour(new Vector3(0, 0, 1), new Vector3(0, 1, 0), new Vector3(-1, 0, 0));
 
             indexList.Add(space.vertexCount + 2);
             indexList.Add(space.vertexCount + 1);
@@ -528,33 +398,26 @@ namespace CubeStudio
             space.indexCount += 6;
 
 
-            Zero.Position = XlYhZh;//new Vector3(0 + loc.X, cubeHeight + loc.Y, cubeWidth + loc.Z);
-            //vertexList[toReplace.count].Color = sideColor;
-            Zero.Normal = thisNormal;
+            Zero.Position = XlYhZh;
+
             Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
-            //vertexList[toReplace.count].TextureCoordinate = new Vector2(0 + frontTexturePos.X, 0 + frontTexturePos.Y);
+            Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
 
 
 
-            One.Position = XlYlZh;//new Vector3(0f + loc.X, 0f + loc.Y, cubeWidth + loc.Z);
-            //vertexList[toReplace.count].Color = sideColor;
-            One.Normal = thisNormal;
+            One.Position = XlYlZh;
             One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
-            //vertexList[toReplace.count].TextureCoordinate = new Vector2(frontTexturePos.X, 0 + frontTexturePos.Y + imageWidth);
+            One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
 
 
-            Two.Position = XhYlZh;//new Vector3(cubeWidth + loc.X, 0f + loc.Y, cubeWidth + loc.Z);
-            //vertexList[toReplace.count].Color = sideColor;
-            Two.Normal = thisNormal;
+            Two.Position = XhYlZh;
             Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
-            // vertexList[toReplace.count].TextureCoordinate = new Vector2(imageWidth + frontTexturePos.X, imageWidth + frontTexturePos.Y);
+            Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
 
 
-            Three.Position = XhYhZh;//new Vector3(cubeWidth + loc.X, cubeHeight + loc.Y, cubeWidth + loc.Z);
-            //vertexList[toReplace.count].Color = sideColor;
-            Three.Normal = thisNormal;
+            Three.Position = XhYhZh;
             Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
-            // vertexList[toReplace.count].TextureCoordinate = new Vector2(imageWidth + frontTexturePos.X, 0 + frontTexturePos.Y);
+            Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
 
 
 
@@ -575,12 +438,7 @@ namespace CubeStudio
         {
 
 
-            Vector3 thisNormal = new Vector3(-.6f, -.5f, 1f);
-            thisNormal.Normalize();
-            Vector2 frontTexturePos = texturePos;
-
-
-
+          assign_Normal_Binormal_TanToOneTwoThreeFour(new Vector3(-1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1));
 
 
             indexList.Add(space.vertexCount + 0);
@@ -592,32 +450,24 @@ namespace CubeStudio
             space.indexCount += 6;
 
 
-            Zero.Position = XlYlZh;//new Vector3(0f + loc.X, 0f + loc.Y, cubeWidth + loc.Z);//
-            //vertexList[toReplace.count].Color = sideColor;
-            Zero.Normal = thisNormal;
+            Zero.Position = XlYlZh;
             Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
+            Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
 
 
-
-            One.Position = XlYhZl;//new Vector3(0 + loc.X, cubeHeight + loc.Y, 0f + loc.Z);//
-            //vertexList[toReplace.count].Color = sideColor;
-            One.Normal = thisNormal;
+            One.Position = XlYhZl;
             One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
+            One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
 
 
-
-            Two.Position = XlYhZh;//new Vector3(0f + loc.X, cubeHeight + loc.Y, cubeWidth + loc.Z);//
-            //vertexList[toReplace.count].Color = sideColor;
-            Two.Normal = thisNormal;
+            Two.Position = XlYhZh;
             Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
+            Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
 
 
-
-            Three.Position = XlYlZl;//new Vector3(0f + loc.X, 0f + loc.Y, 0f + loc.Z);//
-            //vertexList[toReplace.count].Color = sideColor;
-            Three.Normal = thisNormal;
+            Three.Position = XlYlZl;
             Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
-
+            Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
 
 
 
@@ -636,15 +486,9 @@ namespace CubeStudio
         {
 
 
-            Vector3 thisNormal = new Vector3(1, 0, 0);
+           assign_Normal_Binormal_TanToOneTwoThreeFour(new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1));
 
-
-            thisNormal.Normalize();
             Vector2 frontTexturePos = texturePos;
-
-
-
-
 
             indexList.Add(space.vertexCount + 1);
             indexList.Add(space.vertexCount + 3);
@@ -655,28 +499,24 @@ namespace CubeStudio
             space.indexCount += 6;
 
 
-            Zero.Position = XhYlZh;//new Vector3(cubeWidth + loc.X, 0f + loc.Y, cubeWidth + loc.Z);//
-            Zero.Normal = thisNormal;
+            Zero.Position = XhYlZh;
             Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
+            Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
 
 
-
-            One.Position = XhYhZl;//new Vector3(cubeWidth + loc.X, cubeHeight + loc.Y, 0f + loc.Z);//
-            One.Normal = thisNormal;
+            One.Position = XhYhZl;
             One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
+            One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
 
 
-
-            Two.Position = XhYhZh;//new Vector3(cubeWidth + loc.X, cubeHeight + loc.Y, cubeWidth + loc.Z);//
-            Two.Normal = thisNormal;
+            Two.Position = XhYhZh;
             Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
+            Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
 
 
-
-            Three.Position = XhYlZl;//new Vector3(cubeWidth + loc.X, 0f + loc.Y, 0f + loc.Z);//
-            Three.Normal = thisNormal;
+            Three.Position = XhYlZl;
             Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
-
+            Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
 
 
             vertexList.Add(Zero);
@@ -692,13 +532,7 @@ namespace CubeStudio
         public void drawBottom(PaintedCubeSpace space, List<int> indexList, List<VertexPostitionColorPaintNormal> vertexList, Vector3 loc, byte[] AOarray)
         {
 
-            Vector3 thisNormal = new Vector3(0, 1, 0);
-            //setupVertices();
-
-
-
-
-
+            assign_Normal_Binormal_TanToOneTwoThreeFour(new Vector3(0, -1, 0), new Vector3(1, 0, 0), new Vector3(0,0, 1));
 
             indexList.Add(space.vertexCount + 1);
             indexList.Add(space.vertexCount + 3);
@@ -709,35 +543,27 @@ namespace CubeStudio
             space.indexCount += 6;
 
 
-
-            Zero.Position = XlYlZl;//new Vector3(0f + loc.X, 0 + loc.Y, 0f + loc.Z);
-            //vertexList[toReplace.count].Color = topColor;
-            Zero.Normal = thisNormal;
+            //Top and bottom texture coords use different corners' texcoords.  This is good.
+            Zero.Position = XlYlZl;
             Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
+            Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
 
 
 
-
-            One.Position = XhYlZh;//new Vector3(cubeWidth + loc.X, 0 + loc.Y, cubeWidth + loc.Z);
-            //vertexList[toReplace.count].Color = topColor;
-            One.Normal = thisNormal;
+            One.Position = XhYlZh;
             One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
+            One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
 
 
-
-            Two.Position = XlYlZh;//new Vector3(0f + loc.X, 0 + loc.Y, cubeWidth + loc.Z);
-            //vertexList[toReplace.count].Color = topColor;
-            Two.Normal = thisNormal;
+            Two.Position = XlYlZh;
             Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
+            Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
 
 
 
-
-            Three.Position = XhYlZl;//new Vector3(cubeWidth + loc.X, 0 + loc.Y, 0f + loc.Z);
-
-            Three.Normal = thisNormal;
+            Three.Position = XhYlZl;
             Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
-
+            Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
 
 
             vertexList.Add(Zero);
@@ -751,14 +577,12 @@ namespace CubeStudio
 
         }
 
-
-
         public void drawTop(PaintedCubeSpace space, List<int> indexList, List<VertexPostitionColorPaintNormal> vertexList, Vector3 loc, byte[] AOarray)
         {
 
 
-            Vector3 thisNormal = new Vector3(0, 1, 0);
-            //setupVertices();
+           assign_Normal_Binormal_TanToOneTwoThreeFour(new Vector3(0, 1, 0), new Vector3(1, 0, 0), new Vector3(0, 0, 1));
+
 
 
 
@@ -775,31 +599,23 @@ namespace CubeStudio
 
 
 
-            Zero.Position = XlYhZl;//new Vector3(0f + loc.X, cubeHeight + loc.Y, 0f + loc.Z);
-            //vertexList[toReplace.count].Color = topColor;
-            Zero.Normal = thisNormal;
+            Zero.Position = XlYhZl;
             Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
+            Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
 
 
-
-            One.Position = XhYhZh;//new Vector3(cubeWidth + loc.X, cubeHeight + loc.Y, cubeWidth + loc.Z);
-            //vertexList[toReplace.count].Color = topColor;
-            One.Normal = thisNormal;
+            One.Position = XhYhZh;;
             One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
+            One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
 
-
-            Two.Position = XlYhZh;//new Vector3(0f + loc.X, cubeHeight + loc.Y, cubeWidth + loc.Z);
-            //vertexList[toReplace.count].Color = topColor;
-            Two.Normal = thisNormal;
+            Two.Position = XlYhZh;
             Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
+            Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
 
 
-
-            Three.Position = XhYhZl;//new Vector3(cubeWidth + loc.X, cubeHeight + loc.Y, 0f + loc.Z);
-
-            Three.Normal = thisNormal;
+            Three.Position = XhYhZl;
             Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
-
+            Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
 
 
             vertexList.Add(Zero);

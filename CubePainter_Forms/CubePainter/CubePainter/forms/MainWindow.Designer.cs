@@ -98,7 +98,7 @@ namespace CubeStudio
             this.menuStrip1.Location = new System.Drawing.Point(1026, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(0);
-            this.menuStrip1.Size = new System.Drawing.Size(178, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(86, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -211,6 +211,7 @@ namespace CubeStudio
             this.painterDisplay1.Size = new System.Drawing.Size(1022, 658);
             this.painterDisplay1.TabIndex = 0;
             this.painterDisplay1.Text = "painterDisplay1";
+            this.painterDisplay1.Click += new System.EventHandler(this.painterDisplay1_Click);
             // 
             // tabPage2
             // 
@@ -237,7 +238,7 @@ namespace CubeStudio
             // nodeRightCLickMenu
             // 
             this.nodeRightCLickMenu.Name = "nodeRightCLickMenu";
-            this.nodeRightCLickMenu.Size = new System.Drawing.Size(61, 4);
+            this.nodeRightCLickMenu.Size = new System.Drawing.Size(153, 26);
             // 
             // nodeContextMenu1
             // 
@@ -256,9 +257,9 @@ namespace CubeStudio
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.Location = new System.Drawing.Point(1026, 22);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
@@ -354,7 +355,7 @@ namespace CubeStudio
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1264, 682);
+            this.ClientSize = new System.Drawing.Size(1264, 681);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.tabControl1);
