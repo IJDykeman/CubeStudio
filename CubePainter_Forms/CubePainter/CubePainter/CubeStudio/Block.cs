@@ -45,11 +45,17 @@ namespace CubeStudio
 
         public Block(Color ncolor)
         {
+            Byte nType = 1;
             paint = ncolor;
             Zero.PaintColor = paint;
             One.PaintColor = paint;
             Two.PaintColor = paint;
             Three.PaintColor = paint;
+            Zero.Color.G = nType;
+            One.Color.G = nType;
+            Two.Color.G = nType;
+            Three.Color.G = nType;
+
             texCoordsByCorner = new Vector2[8];
 
             texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh] = new Vector2(1, 1);

@@ -18,13 +18,14 @@ namespace CubeStudio
         public struct VertexPostitionColorPaintNormal
         {
             public Vector3 Position;
-            public Color Color;
+            public Color Color;//R holds AO, G holds byte type
             public Color PaintColor;
             public Vector3 Normal;
             public Vector3 BiNormal;
             public Vector3 Tangent;
             public Vector2 textureCoordinate;
             public Vector3 InterPosition;
+
 
 
             public readonly static VertexDeclaration VertexDeclaration = new VertexDeclaration
@@ -37,7 +38,6 @@ namespace CubeStudio
                 new VertexElement(sizeof(float) * 3 * 3 + 8, VertexElementFormat.Vector3, VertexElementUsage.Normal, 2),
                 new VertexElement(sizeof(float) * 3 * 4 + 8, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0),
                 new VertexElement(sizeof(float) * (3 * 4 + 2 )+ 8, VertexElementFormat.Vector3, VertexElementUsage.TextureCoordinate, 1)
-
 
             );
         }

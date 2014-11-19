@@ -29,6 +29,7 @@ namespace CubePainter
         public static void construct(GraphicsDevice mdevice)
         {
             device = mdevice;
+            
 
 
         }
@@ -41,11 +42,21 @@ namespace CubePainter
 
             //String texName = "Rock_Obsidian_1k";
             //String texName = "Brick_MedievalBrown3_1k";
-            String texName = "Ground_GuiLayeredCliffMossIvy_1k";
-            effect.Parameters["xTexture"].SetValue(content.Load<Texture2D>("textures/"+texName+"_alb"));
+            //String texName = "Ground_GuiLayeredCliffMossIvy_1k";
+            //String texName = "Ground_CobbleStonePath_1k";
+            //String texName = "Ground_GnarlyGrass_1k";
+            String texName = "Wood_PlanksOldBeat_1k";
+
+            /*effect.Parameters["xTexture"].SetValue(content.Load<Texture2D>("textures/"+texName+"_alb"));
             effect.Parameters["xNormalMap"].SetValue(content.Load<Texture2D>("textures/"+texName+"_n"));
             effect.Parameters["xSpecularMap"].SetValue(content.Load<Texture2D>("textures/"+texName+"_s"));
             effect.Parameters["xHeightMap"].SetValue(content.Load<Texture2D>("textures/"+texName+"_h"));
+            effect.Parameters["xGlossMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_g"));*/
+
+            effect.Parameters["xTexture"].SetValue(content.Load<Texture2D>("textures/" + texName + "_alb"));
+            effect.Parameters["xNormalMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_n"));
+            effect.Parameters["xSpecularMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_s"));
+            effect.Parameters["xHeightMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_h"));
             effect.Parameters["xGlossMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_g"));
 
 

@@ -29,6 +29,7 @@ namespace CubePainter
 
             main = this;
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferMultiSampling = true;
             Content.RootDirectory = "Content";
         }
 

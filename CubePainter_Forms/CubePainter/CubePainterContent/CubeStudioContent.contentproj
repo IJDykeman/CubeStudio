@@ -249,32 +249,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="textures\PavingStones_MossyFootpath_1k_d.tga">
-      <Name>PavingStones_MossyFootpath_1k_d</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
-    </Compile>
-    <Compile Include="textures\PavingStones_MossyFootpath_1k_h.tga">
-      <Name>PavingStones_MossyFootpath_1k_h</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
-    </Compile>
-    <Compile Include="textures\PavingStones_MossyFootpath_1k_n.tga">
-      <Name>PavingStones_MossyFootpath_1k_n</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
-    </Compile>
-    <Compile Include="textures\PavingStones_MossyFootpath_1k_s.tga">
-      <Name>PavingStones_MossyFootpath_1k_s</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="textures\Ground_GuiLayeredCliffMossIvy_1k_alb.tga">
       <Name>Ground_GuiLayeredCliffMossIvy_1k_alb</Name>
       <Importer>TextureImporter</Importer>
@@ -343,15 +317,104 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="textures\PavingStones_MossyFootpath_1k_g.tga">
-      <Name>PavingStones_MossyFootpath_1k_g</Name>
+    <Compile Include="textures\Ground_GuiLayeredCliffMossIvy_1k_g.tga">
+      <Name>Ground_GuiLayeredCliffMossIvy_1k_g</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="textures\Ground_GuiLayeredCliffMossIvy_1k_g.tga">
-      <Name>Ground_GuiLayeredCliffMossIvy_1k_g</Name>
+    <Compile Include="textures\Ground_CobbleStonePath_1k_alb.tga">
+      <Name>Ground_CobbleStonePath_1k_alb</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Ground_CobbleStonePath_1k_g.tga">
+      <Name>Ground_CobbleStonePath_1k_g</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Ground_CobbleStonePath_1k_h.tga">
+      <Name>Ground_CobbleStonePath_1k_h</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Ground_CobbleStonePath_1k_n.tga">
+      <Name>Ground_CobbleStonePath_1k_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Ground_CobbleStonePath_1k_s.tga">
+      <Name>Ground_CobbleStonePath_1k_s</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="textures\Ground_GnarlyGrass_1k_alb.tga">
+      <Name>Ground_GnarlyGrass_1k_alb</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Ground_GnarlyGrass_1k_g.tga">
+      <Name>Ground_GnarlyGrass_1k_g</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Ground_GnarlyGrass_1k_h.tga">
+      <Name>Ground_GnarlyGrass_1k_h</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Ground_GnarlyGrass_1k_n.tga">
+      <Name>Ground_GnarlyGrass_1k_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Ground_GnarlyGrass_1k_s.tga">
+      <Name>Ground_GnarlyGrass_1k_s</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="textures\Wood_PlanksOldBeat_1k_alb.tga">
+      <Name>Wood_PlanksOldBeat_1k_alb</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Wood_PlanksOldBeat_1k_g.tga">
+      <Name>Wood_PlanksOldBeat_1k_g</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Wood_PlanksOldBeat_1k_h.tga">
+      <Name>Wood_PlanksOldBeat_1k_h</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Wood_PlanksOldBeat_1k_n.tga">
+      <Name>Wood_PlanksOldBeat_1k_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
+    </Compile>
+    <Compile Include="textures\Wood_PlanksOldBeat_1k_s.tga">
+      <Name>Wood_PlanksOldBeat_1k_s</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>

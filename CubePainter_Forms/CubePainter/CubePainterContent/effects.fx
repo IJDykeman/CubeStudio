@@ -120,7 +120,7 @@ PixelToFrame ColoredPS(VertexToPixel PSIn)
 }*/
 PixelToFrame ColoredPS(VertexToPixel PSIn)
 {
-	PixelToFrame Output = (PixelToFrame)0;
+	/*PixelToFrame Output = (PixelToFrame)0;
 
 	float level = tex2D(HeightMapSampler, PSIn.TextureCoords).r;
 	float2 displacedTex = (level * .02 - .01) * xViewDirection.xy + PSIn.TextureCoords;
@@ -133,7 +133,7 @@ PixelToFrame ColoredPS(VertexToPixel PSIn)
 	float4 Normal = float4(normalMap, 1.0);
 		float3  Specular = tex2D(SpecularMapSampler, displacedTex).rgb;
 		float3  Diffuse = tex2D(TextureSampler, displacedTex).rgb;
-		float2  Roughness = tex2D(GlossMapSampler, displacedTex).rg;
+		float2  Roughness = 1-tex2D(GlossMapSampler, displacedTex).rg;
 		//Roughness.rg = pow(Roughness.rg,8);//MAGIC HACK
 	Roughness.r *= 3.0f;
 
@@ -163,10 +163,78 @@ PixelToFrame ColoredPS(VertexToPixel PSIn)
 	float  R = A * B;
 
 	// Compute the final term
-	//float3  S = Specular * ((G * F * R) / (NormalDotLight * NormalDotView));
-	float3  Final = /*cLightColour.rgb **/ max(0.0f, NormalDotLight) * (Diffuse * 1 / pow(distance(xLightLoc, PSIn.PosToUse), 1));// +S);
-
+	float3  S = Specular * ((G * F * R) / (NormalDotLight * NormalDotView));
+	float3  Final =  max(0.0f, NormalDotLight) * (Diffuse * 1 / pow(distance(xLightLoc, PSIn.PosToUse), 1) +S);
+	//ADD LIGHT COLOR?
 		Output.Color = float4(Final, 1.0f);
+	return Output;*/
+	
+	PixelToFrame Output = (PixelToFrame)0;
+	float3 lightDirection = normalize(xLightLoc-PSIn.PosToUse);
+	float level = tex2D(HeightMapSampler, PSIn.TextureCoords).r;
+	float2 displacedTex = (level * .02 - .01) * xViewDirection.xy + PSIn.TextureCoords;
+
+		// Sample the textures
+		float3 normal = 2.0 *(tex2D(NormalMapSampler, displacedTex)) - 1.0;
+		normal = normalize(mul(normal, PSIn.worldSpaceToTangentSpace));
+	float roughness_value = pow(tex2D(GlossMapSampler, displacedTex).r,2);//SQUARE IS MAGIC NUMBER
+	float3 specularColor = tex2D(SpecularMapSampler, displacedTex);
+
+	//normalMap = -normalMap;
+	// Compute any aliases and intermediary values
+	// -------------------------------------------
+	float3 half_vector = normalize(lightDirection - xViewDirection);
+		float NdotL = saturate(dot(normal, lightDirection));
+	float NdotH = saturate(dot(normal, half_vector));
+	float NdotV = saturate(dot(normal, -xViewDirection));
+	float VdotH = saturate(dot(-xViewDirection, half_vector));
+	float r_sq = roughness_value * roughness_value;
+
+	// Evaluate the geometric term
+	// --------------------------------
+	float geo_numerator = 2.0f * NdotH;
+	float geo_denominator = VdotH;
+
+	float geo_b = (geo_numerator * NdotV) / geo_denominator;
+	float geo_c = (geo_numerator * NdotL) / geo_denominator;
+	float geo = min(1.0f, min(geo_b, geo_c));
+	
+	// Now evaluate the roughness term
+	// -------------------------------
+
+
+		// look up the coefficient from the texture:
+		float roughness = roughness_value;
+
+
+
+	// Next evaluate the Fresnel value
+	// -------------------------------
+		float ref_at_norm_incidence = 2.0;
+	float fresnel = pow(1.0f - VdotH, 5.0f);
+	fresnel *= (1.0f - ref_at_norm_incidence);
+	fresnel += ref_at_norm_incidence;
+
+
+
+	// Put all the terms together to compute
+	// the specular term in the equation
+	// -------------------------------------
+	float3 Rs_numerator = (fresnel * geo * roughness);
+		float Rs_denominator = NdotV * NdotL;
+	float3 Rs = Rs_numerator / (Rs_denominator);
+
+
+
+		// Put all the parts together to generate
+		// the final colour
+		// --------------------------------------
+		float3  albedo = tex2D(TextureSampler, displacedTex).rgb;
+		float3 final =  max(0.0f, NdotL) * (specularColor*Rs + albedo) * (1 / pow(distance(xLightLoc, PSIn.PosToUse), .5));
+
+		// Return the result
+		// -----------------
+		Output.Color = float4(final, 1);
 	return Output;
 }
 
