@@ -18,7 +18,7 @@ namespace CubeStudio
         public struct VertexPostitionColorPaintNormal
         {
             public Vector3 Position;
-            public Color Color;//R holds AO, G holds byte type
+            public Color extraData;//R holds AO, G holds byte type
             public Color PaintColor;
             public Vector3 Normal;
             public Vector3 BiNormal;

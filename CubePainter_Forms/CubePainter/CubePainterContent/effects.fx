@@ -235,6 +235,7 @@ PixelToFrame ColoredPS(VertexToPixel PSIn)
 		// Return the result
 		// -----------------
 		Output.Color = float4(final, 1);
+
 	return Output;
 }
 

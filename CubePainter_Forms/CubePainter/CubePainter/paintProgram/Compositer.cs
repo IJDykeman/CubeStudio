@@ -45,7 +45,7 @@ namespace CubePainter
             //String texName = "Ground_GuiLayeredCliffMossIvy_1k";
             //String texName = "Ground_CobbleStonePath_1k";
             //String texName = "Ground_GnarlyGrass_1k";
-            String texName = "Wood_PlanksOldBeat_1k";
+            String texName = "";
 
             /*effect.Parameters["xTexture"].SetValue(content.Load<Texture2D>("textures/"+texName+"_alb"));
             effect.Parameters["xNormalMap"].SetValue(content.Load<Texture2D>("textures/"+texName+"_n"));
@@ -53,11 +53,11 @@ namespace CubePainter
             effect.Parameters["xHeightMap"].SetValue(content.Load<Texture2D>("textures/"+texName+"_h"));
             effect.Parameters["xGlossMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_g"));*/
 
-            effect.Parameters["xTexture"].SetValue(content.Load<Texture2D>("textures/" + texName + "_alb"));
-            effect.Parameters["xNormalMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_n"));
-            effect.Parameters["xSpecularMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_s"));
-            effect.Parameters["xHeightMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_h"));
-            effect.Parameters["xGlossMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "_g"));
+            effect.Parameters["xTexture"].SetValue(content.Load<Texture2D>("textures/" + texName + "alb"));
+            effect.Parameters["xNormalMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "n"));
+            effect.Parameters["xSpecularMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "s"));
+            effect.Parameters["xHeightMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "h"));
+            effect.Parameters["xGlossMap"].SetValue(content.Load<Texture2D>("textures/" + texName + "g"));
 
 
             // TODO: use this.Content to load your animationProgram content here

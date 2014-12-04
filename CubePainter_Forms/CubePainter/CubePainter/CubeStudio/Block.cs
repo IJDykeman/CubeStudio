@@ -51,10 +51,10 @@ namespace CubeStudio
             One.PaintColor = paint;
             Two.PaintColor = paint;
             Three.PaintColor = paint;
-            Zero.Color.G = nType;
-            One.Color.G = nType;
-            Two.Color.G = nType;
-            Three.Color.G = nType;
+            Zero.extraData.G = nType;
+            One.extraData.G = nType;
+            Two.extraData.G = nType;
+            Three.extraData.G = nType;
 
             texCoordsByCorner = new Vector2[8];
 
@@ -362,19 +362,19 @@ namespace CubeStudio
 
 
             Zero.Position = XlYhZl;//new Vector3(0 + loc.X, cubeHeight + loc.Y, 0f + loc.Z);
-            Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
+            Zero.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
             Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
 
             One.Position = XlYlZl;//new Vector3(0f + loc.X, 0f + loc.Y, 0f + loc.Z);
-            One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
+            One.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
             One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
 
             Two.Position = XhYlZl;//new Vector3(cubeWidth + loc.X, 0f + loc.Y, 0f + loc.Z);
-            Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
+            Two.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
             Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
 
             Three.Position = XhYhZl;//new Vector3(cubeWidth + loc.X, cubeHeight + loc.Y, 0f + loc.Z);
-            Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
+            Three.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
             Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
 
 
@@ -406,23 +406,23 @@ namespace CubeStudio
 
             Zero.Position = XlYhZh;
 
-            Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
+            Zero.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
             Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
 
 
 
             One.Position = XlYlZh;
-            One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
+            One.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
             One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
 
 
             Two.Position = XhYlZh;
-            Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
+            Two.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
             Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
 
 
             Three.Position = XhYhZh;
-            Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
+            Three.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
             Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
 
 
@@ -457,22 +457,22 @@ namespace CubeStudio
 
 
             Zero.Position = XlYlZh;
-            Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
+            Zero.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
             Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
 
 
             One.Position = XlYhZl;
-            One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
+            One.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
             One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
 
 
             Two.Position = XlYhZh;
-            Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
+            Two.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
             Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
 
 
             Three.Position = XlYlZl;
-            Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
+            Three.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
             Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
 
 
@@ -506,22 +506,22 @@ namespace CubeStudio
 
 
             Zero.Position = XhYlZh;
-            Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
+            Zero.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
             Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
 
 
             One.Position = XhYhZl;
-            One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
+            One.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
             One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
 
 
             Two.Position = XhYhZh;
-            Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
+            Two.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
             Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
 
 
             Three.Position = XhYlZl;
-            Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
+            Three.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
             Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
 
 
@@ -551,24 +551,24 @@ namespace CubeStudio
 
             //Top and bottom texture coords use different corners' texcoords.  This is good.
             Zero.Position = XlYlZl;
-            Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
+            Zero.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
             Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
 
 
 
             One.Position = XhYlZh;
-            One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
+            One.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZh];
             One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
 
 
             Two.Position = XlYlZh;
-            Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
+            Two.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
             Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
 
 
 
             Three.Position = XhYlZl;
-            Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
+            Three.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYlZl];
             Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
 
 
@@ -606,21 +606,21 @@ namespace CubeStudio
 
 
             Zero.Position = XlYhZl;
-            Zero.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
+            Zero.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
             Zero.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZl];
 
 
             One.Position = XhYhZh;;
-            One.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
+            One.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZh];
             One.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
 
             Two.Position = XlYhZh;
-            Two.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
+            Two.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZh];
             Two.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYlZh];
 
 
             Three.Position = XhYhZl;
-            Three.Color.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
+            Three.extraData.R = AOarray[(int)PaintedCubeSpace.cornerToAOArrayLoc.XhYhZl];
             Three.textureCoordinate = texCoordsByCorner[(int)PaintedCubeSpace.cornerToAOArrayLoc.XlYhZl];
 
 
